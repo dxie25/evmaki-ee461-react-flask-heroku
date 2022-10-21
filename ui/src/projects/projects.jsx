@@ -8,13 +8,41 @@ function eventNotImplemented() {
 
 // Hardware set display component
 function HardwareSet(props) {
+  const [qty, changeQty] = useState(0);
+  function handleChangeQty(event) {
+    changeQty(event.target.value);
+  }
+
+  function checkIn(qty) {
+    fetch(`/api/${props.projectName}/checkIn/${qty}`, {
+      method: 'POST',
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((text) => {
+        alert(text);
+      });
+  }
+  function checkOut(qty) {
+    fetch(`/api/${props.projectName}/checkOut/${qty}`, {
+      method: 'POST',
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((text) => {
+        alert(text);
+      });
+  }
+
   return (
     <div className="flex-parent">
       <p className="flex-child-1">{`${props.name}: ${props.checkedOut}/${props.availability}`}</p>
       <div className="flex-child-4">
-        <TextField label="Enter qty" variant="filled" type="number" disabled={!props.userCanModify} />
-        <Button className="button-fit" variant="contained" disabled={!props.userCanModify} onClick={eventNotImplemented}>Check In</Button>
-        <Button className="button-fit" variant="contained" disabled={!props.userCanModify} onClick={eventNotImplemented}>Check Out</Button>
+        <TextField label="Enter qty" variant="filled" type="number" disabled={!props.userCanModify} value={qty} onChange={handleChangeQty} />
+        <Button className="button-fit" variant="contained" disabled={!props.userCanModify} onClick={() => checkIn(qty)}>Check In</Button>
+        <Button className="button-fit" variant="contained" disabled={!props.userCanModify} onClick={() => checkOut(qty)}>Check Out</Button>
       </div>
     </div>
   );
@@ -43,6 +71,7 @@ function Project(props) {
       <HardwareSet
         name={hardwareSet.name}
         key={hardwareSet.name}
+        projectName={props.name}
         checkedOut={hardwareSet.checkedOut}
         availability={hardwareSet.availability}
         userCanModify={props.userHasAccess}
@@ -130,6 +159,16 @@ function Projects() {
   const [userAccess, setUserAccess] = useState(initialUserAccess);
 
   function toggleUserAccess(projectName) {
+    fetch(`/api/${projectName}/${userAccess[projectName] ? 'leaveProject' : 'joinProject'}`, {
+      method: 'POST',
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((text) => {
+        alert(text);
+      });
+
     const update = Object.assign({}, userAccess);
     update[projectName] = !userAccess[projectName];
     setUserAccess(update);
