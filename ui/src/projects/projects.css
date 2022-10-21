@@ -1,0 +1,32 @@
+.flex-parent {
+  display: flex;
+}
+
+.flex-child-1 {
+  flex: 1;
+}
+.flex-child-2 {
+  flex: 2;
+}
+.flex-child-4 {
+  flex: 4;
+}
+
+.outline {
+  outline: auto;
+}
+
+.button-fit {
+  top: 50%;
+  left: 0%;
+  transform: translate(0, -50%);
+  width: fit-content;
+  height: fit-content;
+}
+
+.bg-access-yes {
+  background-color: lightgreen;
+}
+.bg-access-no {
+  background-color: lightgray;
+}
